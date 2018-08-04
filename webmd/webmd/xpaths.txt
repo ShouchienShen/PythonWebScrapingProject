@@ -1,0 +1,39 @@
+# scrapy web scraping project
+# file for storing necessary xpaths
+
+# xpath for each drug's reviews on "chronic pain" results page
+'//*[@id="ContentPane30"]/div/table/tbody/tr[1]/td[4]/a'
+
+# more robust
+'//div/table/tbody/tr/td[4]/a/@href'
+
+
+
+# url to "filter by all reviews, conditions, and overall rating"
+# already filtered by main condition when navigating to review page for each drugs
+https://www.webmd.com/drugs/drugreview-4398-tramadol-hcl.aspx?drugid=4398&drugname=tramadol-hcl
+# the url that will work (1st page)
+# key features of url that each drug has (and can add onto url obtained from first parser):
+# pageIndex={} # 0 for first page
+# sortby=3
+# conditionFilter=-1
+https://www.webmd.com/drugs/drugreview-4398-tramadol-hcl.aspx?drugid=4398&drugname=tramadol-hcl
+
+
+
+# xpath for each user's review
+'//*[@id="ratings_fmt"]/div[4]' # first review
+'//*[@id="ratings_fmt"]/div[5]' # second review
+'//*[@id="ratings_fmt"]/div[6]' # third review
+'//*[@id="ratings_fmt"]/div[7]' # fourth review
+'//*[@id="ratings_fmt"]/div[8]' # fifth review
+
+# more robust
+'//div[@class="userPost"]'
+
+
+# xpath for condition
+//*[@id="ratings_fmt"]/div[4]/div[1]/div[1] # 1st review
+//*[@id="ratings_fmt"]/div[5]/div[1]/div[1] # 2nd review
+# more robust
+'//div[@class="conditionInfo"]/text()'

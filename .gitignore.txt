@@ -1,0 +1,3 @@
+# Files to ignore
+test_code.ipynb
+.ipynb_checkpoints/**
