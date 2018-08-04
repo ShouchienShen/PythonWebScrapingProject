@@ -54,7 +54,7 @@ class WebmdSpider(Spider):
         review_pages = [base_url.format(i) for i in range(0, pages)]
 
         # direct spider to request each review page
-        for url in review_pages:
+        for url in review_pages: #test first 2 pages
             yield Request(url=url, callback=self.parse_details)
 
 
@@ -67,11 +67,13 @@ class WebmdSpider(Spider):
         # only need one "userPost": each one contains all the information for all reviews on the page
         reviews = reviews[0]
 
-        # regex patterns for reviewer info text field
+        # regex patterns for reviewer info text fields
         ageRegex = re.compile('13-18|19-24|25-34|35-44|45-54|55-64|65-74|75 or over')
         timeRegex = re.compile('less than 1 month|1 to 6 months|6 months to less than 1 year|1 to less than 2 years|2 to less than 5 years|5 to less than 10 years|10 years or more')
         statusRegex = re.compile('Patient|Caregiver')
         genderRegex = re.compile('Male|Female')
+        # regex pattern for comment text field -- clean up extraneous characters
+        commentRegex = re.compile('Comment:|Hide Full Comment|\r|\n|\t')
 
         # define the item
         item = WebmdItem()
@@ -100,12 +102,9 @@ class WebmdSpider(Spider):
             item['ease_of_use'] = reviews.xpath('//div[@id="ctnStars"]/div[2]/p[2]/span[@class="current-rating"]/text()').extract()[i+1].split(": ")[1]
             item['satisfaction'] = reviews.xpath('//div[@id="ctnStars"]/div[3]/p[2]/span[@class="current-rating"]/text()').extract()[i+1].split(": ")[1]
 
-            # extract the text for the comments
-            # if statement to generate empty field for users who didn't leave a review
-            if len(reviews.xpath('//p[3][@class="comment"]/text()')) > 1:
-                item['comment'] = reviews.xpath('//p[2][@class="comment"]/text()').extract()[i]
-            else:
-                item['comment'] = ""
+            # extract the all the text for the comments
+            comments = [''.join(text.xpath('.//text()').extract()) for text in reviews.xpath('//p[3][@class="comment"]')]
+            # create empty text field for reviews without comments
+            item['comment'] = commentRegex.sub('', comments[i])
 
-            print(item['comment'])
-            print("="*50)
+            yield item

@@ -37,3 +37,6 @@ https://www.webmd.com/drugs/drugreview-4398-tramadol-hcl.aspx?drugid=4398&drugna
 //*[@id="ratings_fmt"]/div[5]/div[1]/div[1] # 2nd review
 # more robust
 '//div[@class="conditionInfo"]/text()'
+
+# xpath for drug
+'//div[@class="tb_main"]/h1/text()'
